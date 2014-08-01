@@ -33,21 +33,18 @@ uint64_t ylist_size(ylist_t *);
 int ylist_clear(ylist_t *);
 
 /* ylist下一个元素 */
-inline void *ylist_next(ylist_t *);
+void *ylist_next(ylist_t *);
 
 /* ylist reset cur指针 */
-inline void ylist_reset(ylist_t *);
+void ylist_reset(ylist_t *);
 
 /* ylist加入一个元素 */
 int ylist_add(ylist_t *, void *);
 
-/* ylist加入一个元素到某个索引的元素之前 */
-int ylist_insert_before(ylist_t *, uint64_t, void *);
+/* ylist加入一个元素到某个索引 */
+int ylist_insert(ylist_t *, uint64_t, void *);
 
-/* ylist加入一个元素到某个索引的元素之后 */
-int ylist_insert_after(ylist_t *, uint64_t, void *);
-
-/* 完全克隆一个新的ylist对象 */
+/* 完全克隆一个新的ylist对象 **/
 ylist_t *ylist_clone(ylist_t *);
 
 /* 通过索引得到元素 */

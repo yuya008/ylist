@@ -1,3 +1,4 @@
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -114,7 +115,7 @@ int ylist_clear(ylist_t *l)
 	return 0;
 }
 
-inline void *ylist_next(ylist_t *l)
+void *ylist_next(ylist_t *l)
 {
 	if (!l->cur) {
 		return NULL;
@@ -124,12 +125,12 @@ inline void *ylist_next(ylist_t *l)
 	return node->data_ptr;
 }
 
-inline void ylist_reset(ylist_t *l)
+void ylist_reset(ylist_t *l)
 {
 	l->cur = l->head;
 }
 
-int ylist_insert_before(ylist_t *l, uint64_t index, void *e)
+int ylist_insert(ylist_t *l, uint64_t index, void *e)
 {
 	if (!l->head && !l->tail) {
 		return ylist_add(l, e);
@@ -145,35 +146,12 @@ int ylist_insert_before(ylist_t *l, uint64_t index, void *e)
 		new_node->next = node;
 		node->pre = new_node;
 		l->head = new_node;
+		l->cur = l->head;
 	} else {
 		node->pre->next = new_node;
 		new_node->next = node;
 		new_node->pre = node->pre;
 		node->pre = new_node;
-	}
-	l->count++;
-	return 0;
-}
-
-int ylist_insert_after(ylist_t *l, uint64_t index, void *e)
-{
-	if (!l->head && !l->tail) {
-		return ylist_add(l, e);
-	}
-	ylist_node *node = find_node_index(l, index);
-	if (!node) {
-		return 1;
-	}
-	ylist_node *new_node = new_list_node(e);
-	if (!node->next) {
-		node->next = new_node;
-		new_node->pre = node;
-		l->tail = new_node;
-	} else {
-		node->next->pre = new_node;
-		new_node->next = node;
-		new_node->pre = node->next;
-		node->next = new_node;
 	}
 	l->count++;
 	return 0;
@@ -258,5 +236,36 @@ void ylist_sort(int (*comparator)(void *, void *))
 
 int main(void)
 {
+	ylist_t *l = ylist_init();
+	int i,*u;
+	for (i = 0; i < 10; i++) {
+		u = malloc(sizeof(int));
+		*u = i + 4;
+		if (ylist_add(l, u)) {
+			fprintf(stderr, "error\n");exit(1);
+		}
+	}
+	int *u1, *u2, *u3;
+	u1 = malloc(sizeof(int));
+	*u1 = 10000001;
+	ylist_insert(l, 0, u1);
+
+	u2 = malloc(sizeof(int));
+	*u2 = 10000002;
+	ylist_insert(l, 9, u2);
+
+	u3 = malloc(sizeof(int));
+	*u3 = 10000003;
+	ylist_insert(l, 11, u3);
+
+	int *p;
+	while (1) {
+		p = ylist_next(l);
+		if (!p) {
+			break;
+		}
+		fprintf(stderr, "%d\n", *p);
+		sleep(1);
+	}
 	return 0;
 }
