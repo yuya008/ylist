@@ -229,7 +229,7 @@ ylist_t *ylist_sublist(ylist_t *l, uint64_t start, uint64_t end)
 	return newlist;
 }
 
-void ylist_sort(ylist_t *, comparator func)
+void ylist_sort(ylist_t *l, comparator func)
 {
 	/* TODO：准备实现成桶排序算法 && 多线程排序 */
 }
