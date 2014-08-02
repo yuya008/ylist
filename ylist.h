@@ -5,6 +5,7 @@
 
 typedef struct ylist_t    ylist_t;
 typedef struct ylist_node ylist_node;
+typedef int (*comparator)(void *, void *);
 
 /* ylist主结构 */
 struct ylist_t
@@ -63,10 +64,9 @@ int ylist_remove(ylist_t *, void *);
 int ylist_set(ylist_t *, uint64_t, void *);
 
 /* 排序 */
-void ylist_sort(int (*comparator)(void *, void *));
+void ylist_sort(ylist_t *, comparator func);
 
 /* 返回一个全新的子list */
 ylist_t *ylist_sublist(ylist_t *, uint64_t, uint64_t);
-
 
 #endif

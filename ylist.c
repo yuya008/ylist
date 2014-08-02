@@ -229,9 +229,9 @@ ylist_t *ylist_sublist(ylist_t *l, uint64_t start, uint64_t end)
 	return newlist;
 }
 
-void ylist_sort(int (*comparator)(void *, void *))
+void ylist_sort(ylist_t *, comparator func)
 {
-
+	/* TODO：准备实现成桶排序算法 && 多线程排序 */
 }
 
 int main(void)
@@ -240,23 +240,12 @@ int main(void)
 	int i,*u;
 	for (i = 0; i < 10; i++) {
 		u = malloc(sizeof(int));
-		*u = i + 4;
+		*u = i;
 		if (ylist_add(l, u)) {
 			fprintf(stderr, "error\n");exit(1);
 		}
 	}
-	int *u1, *u2, *u3;
-	u1 = malloc(sizeof(int));
-	*u1 = 10000001;
-	ylist_insert(l, 0, u1);
-
-	u2 = malloc(sizeof(int));
-	*u2 = 10000002;
-	ylist_insert(l, 9, u2);
-
-	u3 = malloc(sizeof(int));
-	*u3 = 10000003;
-	ylist_insert(l, 11, u3);
+	ylist_remove_index(l, 12);
 
 	int *p;
 	while (1) {
